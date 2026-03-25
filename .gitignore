@@ -1,0 +1,12 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+
+# Firebase / secrets
+*.json
+Server/src/06-utils/*.json
+
+# Logs
+*.log
