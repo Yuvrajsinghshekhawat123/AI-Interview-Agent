@@ -80,7 +80,7 @@ export const Login = () => {
           whileHover={{ scale: 1.19 }}
          
             onClick={() => dispatch(setCloseLogin())}
-            className="absolute  -right-3 top-0 text-3xl hover:text-red-500 transition cursor-pointer"
+            className="absolute  -right-3 top-0 text-3xl  transition cursor-pointer"
           >
             <MdCancel />
           </motion.button>
