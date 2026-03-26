@@ -5,6 +5,7 @@ import { setCloseLogin } from "../../00-app/02-authUISlice";
 import { Login } from "../../05-pages/02-PublicPages/01-Login";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
+import Footer from "../../02-Components/02-footer/01-footer";
 
 export const MainLayout = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export const MainLayout = () => {
       >
         <NavBar />
         <Outlet />
-        
+        <Footer/>
       </section>
 
       <AnimatePresence>
