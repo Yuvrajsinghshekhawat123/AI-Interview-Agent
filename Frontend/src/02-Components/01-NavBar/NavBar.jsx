@@ -12,7 +12,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { useQueryClient } from "@tanstack/react-query";
 import { clearUser } from "../../00-app/01-userSlice";
 import { setCloseLogin, setOpenLogin } from "../../00-app/02-authUISlice";
-import { Login } from "../../05-pages/02-PublicPages/01-Login";
+
 
 export default function NavBar() {
   const user = useSelector((state) => state.user.user);
@@ -84,11 +84,11 @@ export default function NavBar() {
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.3 ,duration:0.4 }}
         className={`flex justify-center`}
       >
         {/* ✅ Responsive Container */}
-        <div className="w-full max-w-6xl mt-4  bg-white border border-gray-200 rounded-xl shadow-md px-4 py-3 flex items-center justify-between">
+        <div className="w-full max-w-6xl my-4 bg-white border border-gray-200 rounded-xl shadow-md px-4 py-3 flex items-center justify-between">
           {/* Left */}
           <div className="flex items-center gap-2 sm:gap-4">
             <BsRobot className="bg-black text-white p-1 rounded-lg" size={25} />
@@ -145,6 +145,7 @@ export default function NavBar() {
                             }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            
                             className="bg-black text-white p-2 rounded-lg w-full shadow-md cursor-pointer"
                           >
                             Login

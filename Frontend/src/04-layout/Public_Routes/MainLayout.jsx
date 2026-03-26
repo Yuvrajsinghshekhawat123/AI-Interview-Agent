@@ -16,6 +16,7 @@ export const MainLayout = () => {
       >
         <NavBar />
         <Outlet />
+        
       </section>
 
       <AnimatePresence>
