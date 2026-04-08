@@ -29,3 +29,14 @@ export async function LogutUser() {
     const response=await axiosClient.post("/logout");
     return response.data;
 }
+
+
+
+export async function resumeAnalyze(data) {
+    const response=await axiosClient.post("/analyze-resume",data,{
+      headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    });
+    return response.data;
+}

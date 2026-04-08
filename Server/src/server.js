@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./01-config/connectDB.js";
  import requestIp from "request-ip";
 import { authRouter } from "./04-routes/auth.js";
+import { interviewRouter } from "./04-routes/interview.js";
 
 
 const app=express();
@@ -23,6 +24,7 @@ app.use(express.json());
 
 
 app.use("/api/user",authRouter);
+app.use("/api/user/interview", interviewRouter);
 let port=process.env.PORT;
 
 

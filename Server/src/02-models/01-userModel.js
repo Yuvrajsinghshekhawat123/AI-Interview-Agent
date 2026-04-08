@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema(
 
     firebaseUid: { type: String, required: true }, // ✅ FIXED POSITION
 
-    credits: { type: Number, default: 100 }, // ✅ FIXED POSITION
+    credits: { type: Number, default: 1000 }, // ✅ FIXED POSITION
   },
   { timestamps: true }
 );
