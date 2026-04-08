@@ -13,36 +13,33 @@ import { setCloseLogin } from "../../00-app/02-authUISlice";
 import { MdCancel } from "react-icons/md";
 export const Login = () => {
   const [rotate, setRotate] = useState(0);
-  const { mutate } = useLogin();
+  const { mutateAsync  } = useLogin();
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const handleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+   const handleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-      // ✅ get token immediately
-      const token = await user.getIdToken();
+    const token = await user.getIdToken();
 
-      mutate(token, {
-        onSuccess: async (data) => {
-          await queryClient.invalidateQueries({ queryKey: ["userDetails"] });
-          toast.success(data.message);
-          dispatch(setCloseLogin());
-          navigate("/", { replace: true });
-        },
-        onError: (err) => {
-          setError(err.response?.data?.message || "Something went wrong");
-        },
-      });
-    } catch (error) {
-      setError("Login failed");
-    }
-  };
+    // ✅ Correct usage
+    const data = await mutateAsync(token);
+
+    await queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+
+    toast.success(data.message);
+    dispatch(setCloseLogin());
+    navigate("/", { replace: true });
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
 
   function handleRotate() {
     setRotate((prev) => prev + 360);

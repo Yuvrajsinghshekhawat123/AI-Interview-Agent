@@ -14,9 +14,11 @@ import config from "../../assets/confi.png";
 import credit from "../../assets/credit.png";
 import HR from "../../assets/HR.png";
 import tech from "../../assets/tech.png";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const cardAnimation = {
     whileHover: {
@@ -113,7 +115,8 @@ export default function Home() {
           <motion.button
             onClick={() => {
               // navigate("/login");
-              dispatch(setOpenLogin());
+               if(!user) dispatch(setOpenLogin());
+               else navigate("/user/interview");
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
