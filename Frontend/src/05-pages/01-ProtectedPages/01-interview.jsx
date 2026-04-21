@@ -48,6 +48,7 @@ export default function InterviewSetup() {
       },
       onError: (err) => {
         setIsAnalyzing(false);
+        setFileName("");
         toast.error(err.response?.data?.message || "Something went wrong");
       },
     });
@@ -69,6 +70,7 @@ export default function InterviewSetup() {
       },
       onError: (err) => {
         setIsGeneratingQuestions(false);
+        setFileName("");
         toast.error(err.response?.data?.message || "Something went wrong");
       }
     });
