@@ -8,6 +8,8 @@ import { ToastContainer } from "react-toastify";
 import { AuthRoute } from "./04-layout/Public_Routes/01-AuthRoute.jsx";
 import PrivateRoute from "./04-layout/Protected_Routes/01-PrivateRoute.jsx";
 import InterviewSetup from "./05-pages/01-ProtectedPages/01-interview.jsx";
+import { Interview2 } from "./05-pages/01-ProtectedPages/02-interview2.jsx";
+import './index.css';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,9 +32,7 @@ function App() {
       children: [
         {
           element: <MainLayout />, // ✅ layout wrapper
-          children: [
-            { index: true, element: <Home /> },
-          ],
+          children: [{ index: true, element: <Home /> }],
         },
       ],
     },
@@ -40,14 +40,17 @@ function App() {
     {
       path: "/user",
       element: <PrivateRoute />,
-      children: [{ path:"interview", element: <InterviewSetup /> }],
+      children: [
+        { path: "interview", element: <InterviewSetup /> },
+        { path: "interview2", element: <Interview2 /> },
+      ],
     },
   ]);
 
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ToastContainer position="top-center" autoClose={3000} />
+        <ToastContainer position="top-center" autoClose={3000} theme="dark" />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </>
