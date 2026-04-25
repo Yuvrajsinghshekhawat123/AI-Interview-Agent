@@ -177,7 +177,6 @@ Do not explain.
     });
   } catch (err) {
     console.log(err);
-
     return res.status(500).json({
       success: false,
       message: err.message,
@@ -195,9 +194,8 @@ export async function generateQuestions(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
 
-
     const { role, experience, mode, resumeText, projects, skills } = req.body;
-    
+
     if (!role || !experience || !mode) {
       return res.status(400).json({
         success: false,
@@ -287,7 +285,6 @@ export async function generateQuestions(req, res) {
 
 // if user refreseh the page then gernate questions store in reduc vaninsh , so create api which
 
-
 export async function submitAnswer(req, res) {
   try {
     const { interviewId, questionIndex, answer, timeTaken } = req.body;
@@ -330,9 +327,8 @@ export async function submitAnswer(req, res) {
     const content = response.choices[0].message.content;
 
     const parsed = JSON.parse(content);
-     
 
-     // now store it in qustion talbe
+    // now store it in qustion talbe
     question.answer = answer;
     question.confidence = parsed.confidence;
     question.communication = parsed.communication;
@@ -341,43 +337,33 @@ export async function submitAnswer(req, res) {
     question.feedback = parsed.feedback;
     await interview.save();
 
-
-
     return res.json({
       success: true,
       message: parsed.feedback,
     });
-
   } catch (err) {
     console.error(err);
     return res.status(500).json({
       success: false,
       message: "An error occurred while submitting the answer",
     });
-
   }
 }
 
-
-
-
 // final report
-export async function finishInterview(req,res) {
+export async function finishInterview(req, res) {
   try {
-
-    const {interviewId} = req.body;
-    const interview=await Interview.findById(interviewId);
-
-    if(!interview) {
+    const { interviewId } = req.body;
+    console.log(interviewId);
+    const interview = await Interview.findById(interviewId);
+    if (!interview) {
       return res.status(404).json({
         success: false,
         message: "Interview not found",
       });
     }
 
-
-    
-    const totalQuestions=interview.questions.length;
+    const totalQuestions = interview.questions.length;
     let totalScore = 0;
     let totalConfidence = 0;
     let totalCommunication = 0;
@@ -390,36 +376,37 @@ export async function finishInterview(req,res) {
       totalCorrectness += question.correctness || 0;
     });
 
-
     // now find eah one avrage
     const averageFinalScore = totalQuestions ? totalScore / totalQuestions : 0;
-    const averageConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
-    const averageCommunication = totalQuestions ? totalCommunication / totalQuestions : 0;
-    const averageCorrectness = totalQuestions ? totalCorrectness / totalQuestions : 0;
+    const averageConfidence = totalQuestions
+      ? totalConfidence / totalQuestions
+      : 0;
+    const averageCommunication = totalQuestions
+      ? totalCommunication / totalQuestions
+      : 0;
+    const averageCorrectness = totalQuestions
+      ? totalCorrectness / totalQuestions
+      : 0;
 
-
-    interview.finalScore=averageFinalScore;
-    interview.status="completed"
+    interview.finalScore = averageFinalScore;
+    interview.status = "completed";
     await interview.save();
 
+    return res.status(200).json({
+      finalScore: Number(averageFinalScore.toFixed(1)),
+      confidence: Number(averageConfidence.toFixed(1)),
+      communication: Number(averageCommunication.toFixed(1)),
+      correctness: Number(averageCorrectness.toFixed(1)),
 
-  return res.status(200).json({
-  finalScore: Number(averageFinalScore.toFixed(1)),
-  confidence: Number(averageConfidence.toFixed(1)),
-  communication: Number(averageCommunication.toFixed(1)),
-  correctness: Number(averageCorrectness.toFixed(1)),
-
-  questionWiseScore: interview.questions.map((q) => ({
-    question: q.question,
-    score: q.score || 0,
-    feedback: q.feedback || "",
-    confidence: q.confidence || 0,
-    communication: q.communication || 0,
-    correctness: q.correctness || 0,
-  })),
-});
-
-
+      questionWiseScore: interview.questions.map((q) => ({
+        question: q.question,
+        score: q.score || 0,
+        feedback: q.feedback || "",
+        confidence: q.confidence || 0,
+        communication: q.communication || 0,
+        correctness: q.correctness || 0,
+      })),
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -427,5 +414,84 @@ export async function finishInterview(req,res) {
       message: "An error occurred while finishing the interview",
     });
   }
+}
 
+// get interview history of user
+// get interview history of user
+// Get detailed interview history with full question breakdown
+export async function interviewHistoryDetailed(req, res) {
+  try {
+    const user = await User.findOne({ _id: req.userId });
+
+    if (!user) {
+      return res.status(404).json({ 
+        success: false,
+        message: "User not found" 
+      });
+    }
+    let query = { userId: req.userId };
+
+          
+    let interviewHistory = await Interview.find(query)
+      .sort({ createdAt: -1 })
+      .select('-__v');
+
+    if (!interviewHistory || interviewHistory.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No interview history found",
+        data: []
+      });
+    }
+    // Format with complete details
+    const formattedHistory = interviewHistory.map(interview => ({
+      interviewId: interview._id,
+      role: interview.role,
+      experience: interview.experience,
+      mode: interview.mode,
+      finalScore: interview.finalScore || 0,
+      status: interview.status,
+      createdAt: interview.createdAt,
+      questions: interview.questions?.map((q, index) => ({
+        id: index + 1,
+        question: q.question,
+        difficulty: q.difficulty,
+        answer: q.answer,
+        feedback: q.feedback,
+        score: q.score,
+        confidence: q.confidence,
+        communication: q.communication,
+        correctness: q.correctness
+      })),
+      statistics: {
+        totalQuestions: interview.questions?.length || 0,
+        averageScore: calculateAverage(interview.questions, 'score'),
+        averageConfidence: calculateAverage(interview.questions, 'confidence'),
+        averageCommunication: calculateAverage(interview.questions, 'communication'),
+        averageCorrectness: calculateAverage(interview.questions, 'correctness'),
+      }
+    }));
+
+    return res.status(200).json({
+      success: true,
+      message:  "Interview details retrieved successfully" ,
+      data: formattedHistory,
+      count: formattedHistory.length
+    });
+
+  } catch (err) {
+    console.error("Error in interviewHistoryDetailed:", err);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching interview details",
+      error: err.message
+    });
+  }
+}
+
+// Helper function to calculate average
+function calculateAverage(questions, field) {
+  if (!questions || questions.length === 0) return 0;
+  const sum = questions.reduce((total, q) => total + (q[field] || 0), 0);
+  return Number((sum / questions.length).toFixed(1));
 }

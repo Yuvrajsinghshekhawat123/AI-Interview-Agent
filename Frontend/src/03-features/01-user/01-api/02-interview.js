@@ -18,3 +18,7 @@ export async function finishInterview(data) {
     const resp=await axiosClient.post("/interview/finish-interview", data);
     return resp.data;
 }
+export async function interviewHistoryDetailed() {
+    const resp=await axiosClient.get("/interview/interview-history");
+    return resp.data;
+}
