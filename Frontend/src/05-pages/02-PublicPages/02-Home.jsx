@@ -15,6 +15,7 @@ import credit from "../../assets/credit.png";
 import HR from "../../assets/HR.png";
 import tech from "../../assets/tech.png";
 import { useNavigate } from "react-router-dom";
+
 export default function Home() {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ export default function Home() {
     whileHover: {
       scale: 1.07,
       rotate: 0,
-      borderColor: "#22c55e",
+      borderColor: "#00FFB3",
+      boxShadow: "0 0 20px rgba(0, 255, 179, 0.3)",
     },
     transition: {
       type: "spring",
@@ -60,7 +62,7 @@ export default function Home() {
     {
       title: "HR Interview Mode",
       desc: "Behavioral and communication based evaluation.",
-      img:HR,
+      img: HR,
     },
     {
       title: "Technical Mode",
@@ -80,83 +82,98 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex  justify-center items-center px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-center items-center flex-col  lg:w-[55vw]  gap-5 ">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] flex justify-center items-center px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-center items-center flex-col lg:w-[55vw] gap-5 py-12">
+        
         {/* Top small text */}
-        <p className="text-xs sm:text-sm text-gray-500  flex justify-center items-center gap-2 flex-wrap w-full lg:w-[35vw] ">
-          <IoSparkles size={14} className="text-green-600" />
+        <motion.p
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-xs sm:text-sm text-[#00D4FF]/70 flex justify-center items-center gap-2 flex-wrap w-full lg:w-[35vw]"
+        >
+          <IoSparkles size={14} className="text-[#00FFB3]" />
           <span>AI Powered Smart Interview Platform</span>
-        </p>
+        </motion.p>
 
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-          className="flex flex-col justify-center items-center font-bold text-gray-900 leading-tight sm:w-[70vw]  "
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="flex flex-col justify-center items-center font-bold leading-tight sm:w-[70vw]"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl text-white">
             Practice Interviews with
           </h1>
 
-          <h1 className="mt-2 bg-green-100 text-green-600 px-3 py-1 rounded-full w-fit text-xl sm:text-2xl md:text-3xl">
+          <h1 className="mt-2 bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] text-[#0A0F1E] px-4 py-2 rounded-full w-fit text-xl sm:text-2xl md:text-3xl shadow-lg">
             AI Intelligence
           </h1>
         </motion.div>
 
         {/* Description */}
-        <p className="text-gray-500  sm:mt-6 text-sm sm:text-base md:text-lg px-2 text-center sm:w-[70vw] lg:w-[50vw]">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="text-gray-400 sm:mt-6 text-sm sm:text-base md:text-lg px-2 text-center sm:w-[70vw] lg:w-[50vw]"
+        >
           Role-based mock interviews with smart follow-ups, adaptive difficulty
           and real-time performance evaluation.
-        </p>
+        </motion.p>
 
         {/* Buttons */}
-        <div className=" flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full sm:w-[70vw]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 w-full sm:w-[70vw]"
+        >
           <motion.button
             onClick={() => {
-              // navigate("/login");
-               if(!user) dispatch(setOpenLogin());
-               else navigate("/user/interview");
+              if (!user) dispatch(setOpenLogin());
+              else navigate("/user/interview");
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(0, 255, 179, 0.5)" }}
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "tween", duration: 0.01 }} // ⚡ super fast
-            className="w-full sm:w-auto bg-black text-white px-6 py-3 rounded-full transition"
+            transition={{ type: "tween", duration: 0.2 }}
+            className="w-full sm:w-auto bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] text-[#0A0F1E] font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-[#00FFB3]/30 transition-all duration-300"
           >
             Start Interview
           </motion.button>
 
-          <button className="w-full sm:w-auto border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 transition">
+          <motion.button
+            whileHover={{ scale: 1.05, borderColor: "#00FFB3", color: "#00FFB3" }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full sm:w-auto border border-[#00D4FF]/40 text-gray-300 px-6 py-3 rounded-full hover:bg-[#00FFB3]/10 transition-all duration-300"
+          >
             View History
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
-        {/* cards */}
-        <motion.div 
-         initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{
-               
-              duration: 0.5,
-              ease: "easeOut",
-            }}
-   
-
-        className="flex flex-col md:flex-row gap-6 items-stretch justify-center mt-12 px-4 w-[75vw] sm:w-full">
+        {/* Step Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row gap-6 items-stretch justify-center mt-12 px-4 w-[75vw] sm:w-full"
+        >
           {/* Card 1 */}
           <motion.div
             {...cardAnimation}
-            className=" relative bg-white p-6 rounded-2xl shadow-xl rotate-[-6deg]  flex-1  h-44 sm:h-48 lg:h-50 xl:44   flex flex-col justify-between text-center border-2 border-transparent"
+            className="relative bg-gradient-to-br from-[#0F1629]/80 to-[#0A0F1E]/80 backdrop-blur-xl p-6 rounded-2xl shadow-xl rotate-[-6deg] flex-1 h-44 sm:h-48 lg:h-50 flex flex-col justify-between text-center border-2 border-[#00D4FF]/20"
           >
             <div className="pt-3 text-center">
-              <div className="absolute text-green-500 top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-500 rounded-xl p-2 shadow-md">
-                <BsRobot size={20} />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] rounded-xl p-2 shadow-md">
+                <BsRobot size={20} className="text-[#0A0F1E]" />
               </div>
-              <p className="text-green-600 text-sm font-semibold">STEP 1</p>
-              <h2 className="font-bold mt-2 text-base">
+              <p className="text-[#00FFB3] text-sm font-semibold">STEP 1</p>
+              <h2 className="font-bold mt-2 text-base text-white">
                 Role & Experience Selection
               </h2>
-              <p className="text-gray-500 text-xs pt-2">
+              <p className="text-gray-400 text-xs pt-2">
                 AI adjusts difficulty based on selected job role.
               </p>
             </div>
@@ -165,17 +182,17 @@ export default function Home() {
           {/* Card 2 */}
           <motion.div
             {...cardAnimation}
-            className="relative bg-white p-5 rounded-2xl shadow-xl rotate-[5deg] flex-1  sm:h-48 lg:h-50 xl:44  flex flex-col justify-between text-center border-2 border-transparent"
+            className="relative bg-gradient-to-br from-[#0F1629]/80 to-[#0A0F1E]/80 backdrop-blur-xl p-5 rounded-2xl shadow-xl rotate-[5deg] flex-1 h-44 sm:h-48 lg:h-50 flex flex-col justify-between text-center border-2 border-[#00D4FF]/20"
           >
             <div className="pt-3 text-center">
-              <div className="absolute text-green-500 top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-400 rounded-xl p-2 shadow-md">
-                <TiMicrophoneOutline size={20} />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] rounded-xl p-2 shadow-md">
+                <TiMicrophoneOutline size={20} className="text-[#0A0F1E]" />
               </div>
-              <p className="text-green-600 text-sm font-semibold">STEP 2</p>
-              <h2 className="font-bold mt-2 text-base">
+              <p className="text-[#00FFB3] text-sm font-semibold">STEP 2</p>
+              <h2 className="font-bold mt-2 text-base text-white">
                 Smart Voice Interview
               </h2>
-              <p className="text-gray-500 text-sm pt-2">
+              <p className="text-gray-400 text-sm pt-2">
                 Dynamic follow-up questions based on your answers.
               </p>
             </div>
@@ -184,41 +201,44 @@ export default function Home() {
           {/* Card 3 */}
           <motion.div
             {...cardAnimation}
-            className="relative bg-white p-5 rounded-2xl shadow-xl rotate-[-5deg] flex-1  sm:h-48 lg:h-50 xl:44  flex flex-col justify-between text-center border-2 border-transparent"
+            className="relative bg-gradient-to-br from-[#0F1629]/80 to-[#0A0F1E]/80 backdrop-blur-xl p-5 rounded-2xl shadow-xl rotate-[-5deg] flex-1 h-44 sm:h-48 lg:h-50 flex flex-col justify-between text-center border-2 border-[#00D4FF]/20"
           >
             <div className="pt-3 text-center">
-              <div className="absolute text-green-500 top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-green-400 rounded-xl p-2 shadow-md">
-                <LuTimer size={20} />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] rounded-xl p-2 shadow-md">
+                <LuTimer size={20} className="text-[#0A0F1E]" />
               </div>
-              <p className="text-green-600 text-sm font-semibold">STEP 3</p>
-              <h2 className="font-bold mt-2 text-base">
+              <p className="text-[#00FFB3] text-sm font-semibold">STEP 3</p>
+              <h2 className="font-bold mt-2 text-base text-white">
                 Timer Based Simulation
               </h2>
-              <p className="text-gray-500 text-sm pt-2">
+              <p className="text-gray-400 text-sm pt-2">
                 Real interview pressure with time tracking.
               </p>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Heading */}
+        {/* Advanced AI Capabilities Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-           
-          className="text-center text-2xl md:text-3xl font-bold mt-15 mb-10"
+          viewport={{ once: true }}
+          className="text-center text-2xl md:text-3xl font-bold mt-15 mb-10 text-white"
         >
-          Advanced AI <span className="text-green-600">Capabilities</span>
+          Advanced AI{" "}
+          <span className="bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] bg-clip-text text-transparent">
+            Capabilities
+          </span>
         </motion.h2>
 
-        {/* Grid */}
+        {/* Features Grid */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-         
-          className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2   mx-auto"
+          viewport={{ once: true }}
+          className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-auto"
         >
           {features.map((item, index) => (
             <motion.div
@@ -226,67 +246,63 @@ export default function Home() {
               whileHover={{
                 scale: 1.04,
                 y: -6,
-                boxShadow: "0px 20px 40px rgba(0,0,0,0.12)",
+                boxShadow: "0 20px 40px rgba(0, 212, 255, 0.2)",
+                borderColor: "#00FFB3",
               }}
               transition={{ type: "spring", stiffness: 250, damping: 18 }}
-              className="flex flex-col sm:flex-row items-center gap-4 bg-white rounded-2xl p-5 md:p-6 shadow-md border border-gray-100  cursor-pointer  "
+              className="flex flex-col sm:flex-row items-center gap-4 bg-gradient-to-br from-[#0F1629]/80 to-[#0A0F1E]/80 backdrop-blur-xl rounded-2xl p-5 md:p-6 shadow-lg border border-[#00D4FF]/20 cursor-pointer"
             >
-              {/* Image */}
               <img
                 src={item.img}
                 alt={item.title}
                 className="w-28 h-28 object-contain"
               />
-
-              {/* Text */}
               <div className="text-center sm:text-left">
-                <h3 className="font-semibold text-lg">{item.title}</h3>
-                <p className="text-gray-500 text-sm mt-2">{item.desc}</p>
+                <h3 className="font-semibold text-lg text-white">{item.title}</h3>
+                <p className="text-gray-400 text-sm mt-2">{item.desc}</p>
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Heading */}
+        {/* Multiple Interview Modes Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          
-          className="text-center text-2xl md:text-3xl font-bold mt-15 mb-10"
+          viewport={{ once: true }}
+          className="text-center text-2xl md:text-3xl font-bold mt-15 mb-10 text-white"
         >
-          Multiple Integerview <span className="text-green-600">Modes</span>
+          Multiple Interview{" "}
+          <span className="bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] bg-clip-text text-transparent">
+            Modes
+          </span>
         </motion.h2>
 
-
-        
-
-        <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-         
-        className="grid gap-6 max-w-5xl mx-auto sm:grid-cols-1 md:grid-cols-2">
+        {/* Modes Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="grid gap-6 max-w-5xl mx-auto sm:grid-cols-1 md:grid-cols-2"
+        >
           {modes.map((item, index) => (
             <motion.div
               key={index}
               whileHover={{
                 scale: 1.04,
                 y: -6,
-                boxShadow: "0px 20px 40px rgba(0,0,0,0.12)",
+                boxShadow: "0 20px 40px rgba(0, 212, 255, 0.2)",
+                borderColor: "#00FFB3",
               }}
               transition={{ type: "spring", stiffness: 250, damping: 18 }}
-              className="flex items-center justify-between bg-white rounded-2xl p-6 shadow-md border border-gray-100 cursor-pointer"
+              className="flex items-center justify-between bg-gradient-to-br from-[#0F1629]/80 to-[#0A0F1E]/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-[#00D4FF]/20 cursor-pointer"
             >
-              {/* Left Text */}
               <div>
-                <h3 className="font-semibold text-lg">{item.title}</h3>
-                <p className="text-gray-500 text-sm mt-2 max-w-xs">
-                  {item.desc}
-                </p>
+                <h3 className="font-semibold text-lg text-white">{item.title}</h3>
+                <p className="text-gray-400 text-sm mt-2 max-w-xs">{item.desc}</p>
               </div>
-
-              {/* Right Image */}
               <img
                 src={item.img}
                 alt={item.title}
@@ -296,11 +312,6 @@ export default function Home() {
           ))}
         </motion.div>
       </div>
-
-
-      
-
-       
     </div>
   );
 }

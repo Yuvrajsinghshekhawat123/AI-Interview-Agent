@@ -285,6 +285,9 @@ export async function generateQuestions(req, res) {
   }
 }
 
+// if user refreseh the page then gernate questions store in reduc vaninsh , so create api which
+
+
 export async function submitAnswer(req, res) {
   try {
     const { interviewId, questionIndex, answer, timeTaken } = req.body;
@@ -327,13 +330,14 @@ export async function submitAnswer(req, res) {
     const content = response.choices[0].message.content;
 
     const parsed = JSON.parse(content);
+     
 
      // now store it in qustion talbe
     question.answer = answer;
     question.confidence = parsed.confidence;
     question.communication = parsed.communication;
-    question.correctness = parsed.correctness;
-    question.finalScore = parsed.finalScore;
+    question.correctness = parsed.relevance;
+    question.score = parsed.finalScore;
     question.feedback = parsed.feedback;
     await interview.save();
 
@@ -380,7 +384,7 @@ export async function finishInterview(req,res) {
     let totalCorrectness = 0;
 
     interview.questions.forEach((question) => {
-      totalScore += question.finalScore || 0;
+      totalScore += question.score || 0;
       totalConfidence += question.confidence || 0;
       totalCommunication += question.communication || 0;
       totalCorrectness += question.correctness || 0;

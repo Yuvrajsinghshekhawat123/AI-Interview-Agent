@@ -8,17 +8,17 @@ import { interviewRouter } from "./04-routes/interview.js";
 
 
 const app=express();
+app.use(cors({
+    origin:"http://localhost:5173",
+    methods:["GET", "POST", "PUT", "DELETE"],
+    credentials:true,
+}));
  
 
 // middlewares
 app.use(cookieParser());
 
 app.use(requestIp.mw());
-app.use(cors({
-    origin:"http://localhost:5174",
-    methods:["GET", "POST", "PUT", "DELETE"],
-    credentials:true,
-}));
 
 app.use(express.json());
 
@@ -31,11 +31,17 @@ let port=process.env.PORT;
 
 
 /* -------------------- Start Server -------------------- */
+/* -------------------- Start Server -------------------- */
 async function startServer() {
-    await connectDB();
-    app.listen(port,()=>{
-        console.log(`Server running on Port ${port}`);
-    });
+    try {
+        await connectDB();
+        // Add "0.0.0.0" to listen on all IPv4 interfaces
+        app.listen(port, "0.0.0.0", () => {
+            console.log(`Server running on Port ${port}`);
+        });
+    } catch (error) {
+        console.error("Failed to connect to DB", error);
+    }
 }
 
 startServer();

@@ -1,1 +1,16 @@
  @import "tailwindcss";
+/* Simple Toast Customization */
+.Toastify__toast {
+  background: #0F1629 !important;
+  color: white !important;
+  border: 1px solid #00D4FF !important;
+  border-radius: 12px !important;
+}
+
+.Toastify__progress-bar {
+  background: linear-gradient(90deg, #00D4FF, #00FFB3) !important;
+}
+
+.Toastify__close-button {
+  color: white !important;
+}
