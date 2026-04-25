@@ -144,6 +144,11 @@ export default function Home() {
           </motion.button>
 
           <motion.button
+          onClick={() => {
+                        if (!user) dispatch(setOpenLogin());
+                        else navigate("/user/interviewHistory");
+            }}
+
             whileHover={{ scale: 1.05, borderColor: "#00FFB3", color: "#00FFB3" }}
             whileTap={{ scale: 0.95 }}
             className="w-full sm:w-auto border border-[#00D4FF]/40 text-gray-300 px-6 py-3 rounded-full hover:bg-[#00FFB3]/10 transition-all duration-300"

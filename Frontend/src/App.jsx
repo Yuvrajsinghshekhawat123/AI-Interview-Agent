@@ -11,6 +11,10 @@ import InterviewSetup from "./05-pages/01-ProtectedPages/01-interview.jsx";
 import { Interview2 } from "./05-pages/01-ProtectedPages/02-interview2.jsx";
 import './index.css';
 
+import { InterviewReport } from "./05-pages/01-ProtectedPages/InterviewReport/03-report.jsx";
+import InterviewHistory from "./05-pages/01-ProtectedPages/03-interviewHistory.jsx";
+
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -32,7 +36,11 @@ function App() {
       children: [
         {
           element: <MainLayout />, // ✅ layout wrapper
-          children: [{ index: true, element: <Home /> }],
+          children: [{ index: true, element: <Home /> },
+           
+               
+          ],
+        
         },
       ],
     },
@@ -43,6 +51,9 @@ function App() {
       children: [
         { path: "interview", element: <InterviewSetup /> },
         { path: "interview2", element: <Interview2 /> },
+        { path: "interview/report", element: <InterviewReport /> },
+         { path: "interviewHistory", element: <InterviewHistory/> }
+        
       ],
     },
   ]);

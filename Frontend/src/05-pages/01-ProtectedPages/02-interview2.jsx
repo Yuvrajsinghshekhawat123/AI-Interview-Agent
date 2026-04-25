@@ -51,6 +51,8 @@ export const Interview2 = () => {
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [pauseStartTime, setPauseStartTime] = useState(0);
 
+  const [showEndConfirm, setShowEndConfirm] = useState(false);
+
   const hasSubmittedRef = useRef(false);
   const generatedQuestions = useSelector(
     (state) => state.generatedQuestions.generatedQuestions,
@@ -274,8 +276,8 @@ export const Interview2 = () => {
           setShowAiMessage(false);
           setIsAISpeaking(false);
           toast.success("🎉 Interview completed! Thank you!");
-          navigate("/", { replace: true });
-          dispatch(resetGeneratedQuestions());
+          navigate("/user/interview/report", { replace: true });
+          
         }, 1000);
 
         setAiMessage("🎉 Interview completed! Thank you!");
@@ -364,8 +366,8 @@ export const Interview2 = () => {
                         setShowAiMessage(false);
                         setIsAISpeaking(false);
                         toast.success("🎉 Interview completed! Thank you!");
-                        navigate("/", { replace: true });
-                        dispatch(resetGeneratedQuestions());
+                        navigate("/user/interview/report", { replace: true });
+                         
                       }, 1000);
                     });
                   } else {
@@ -379,11 +381,11 @@ export const Interview2 = () => {
                 }, 500);
               });
             } else {
-             if(err.response?.data?.message) {
-              toast.warning(err.response?.data?.message);
-             } else {
-              toast.error("Something went wrong");
-             }
+              if (err.response?.data?.message) {
+                toast.warning(err.response?.data?.message);
+              } else {
+                toast.error("Something went wrong");
+              }
 
               setIsAISpeaking(false);
               setIsSubmitting(false);
@@ -441,6 +443,50 @@ export const Interview2 = () => {
       return () => clearTimeout(timer);
     }
   }, [questionIndex]);
+
+  // Modified end interview function with confirmation
+  const confirmEndInterview = () => {
+    setShowEndConfirm(true);
+  };
+
+  // End interview function
+  const endInterview = () => {
+    // Stop any ongoing recording
+    if (isRecording) {
+      stopRecording();
+    }
+
+    // Cancel any ongoing speech
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+
+    // Show confirmation toast
+    toast.info("Interview ended by user", {
+      autoClose: 2000,
+    });
+
+    // Navigate to home page
+    navigate("/user/interview/report", { replace: true });
+
+    // Reset Redux state
+    
+
+    // Clean up audio context if exists
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+    }
+
+    // Clean up media stream
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
+    // Clear any timeouts
+    if (silenceTimeoutRef.current) {
+      clearTimeout(silenceTimeoutRef.current);
+    }
+  };
 
   const progress = ((questionIndex + 1) / questions.length) * 100;
 
@@ -733,12 +779,14 @@ export const Interview2 = () => {
               </div>
 
               {/* Action Buttons */}
+              {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className="flex items-center justify-center gap-4"
               >
+                {/* Record Button */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -761,6 +809,7 @@ export const Interview2 = () => {
                   </div>
                 </motion.button>
 
+                {/* Submit Button */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -789,6 +838,22 @@ export const Interview2 = () => {
                       Submit Answer
                     </>
                   )}
+                </motion.button>
+
+                {/* End Interview Button - ADD THIS */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={confirmEndInterview}
+                  disabled={isAISpeaking || isSubmitting}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+                    isAISpeaking || isSubmitting
+                      ? "bg-gray-600 cursor-not-allowed opacity-50"
+                      : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-red-500/30 shadow-lg"
+                  }`}
+                >
+                  <MdStop />
+                  End Interview
                 </motion.button>
               </motion.div>
 
@@ -819,6 +884,63 @@ export const Interview2 = () => {
           </div>
         </div>
       </main>
+
+      <AnimatePresence>
+        {showEndConfirm && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowEndConfirm(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md"
+            >
+              <div className="bg-gradient-to-br from-[#0F1629] to-[#0A0F1E] rounded-2xl p-6 border border-red-500/30 shadow-xl">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MdStop className="text-red-500 text-3xl" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    End Interview?
+                  </h3>
+                  <p className="text-gray-400">
+                    Are you sure you want to end the interview early? Your
+                    progress will not be saved.
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowEndConfirm(false)}
+                    className="flex-1 px-4 py-2 rounded-xl bg-gray-700/50 hover:bg-gray-700 text-white font-semibold transition-all"
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={endInterview}
+                    className="flex-1 px-4 py-2 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold transition-all shadow-red-500/30 shadow-lg"
+                  >
+                    End Interview
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <style>{`
         @keyframes wave1 {

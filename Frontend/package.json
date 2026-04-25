@@ -14,6 +14,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.94.5",
     "axios": "^1.13.6",
+    "date-fns": "^4.1.0",
     "firebase": "^12.10.0",
     "framer-motion": "^12.38.0",
     "react": "^19.2.0",
@@ -23,6 +24,7 @@
     "react-router-dom": "^7.13.1",
     "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
+    "recharts": "^3.8.1",
     "redux-persist": "^6.0.0",
     "run": "^1.5.0",
     "tailwindcss": "^4.2.1"
