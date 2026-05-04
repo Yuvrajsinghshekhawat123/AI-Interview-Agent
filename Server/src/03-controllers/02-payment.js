@@ -167,6 +167,7 @@ export const verifyPayment = async (req, res) => {
   }
 };
 
+
 // Get user's credit balance
 export const getCreditBalance = async (req, res) => {
   try {
