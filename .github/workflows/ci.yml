@@ -2,27 +2,33 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # 🟢 React Frontend
-    - name: Install frontend dependencies
-      run: |
-        cd Frontend
-        npm install
-        npm run build
+      # ✅ Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
 
-    # 🔵 Node Backend
-    - name: Install backend dependencies
-      run: |
-        cd Server
-        npm install
+      # 🟢 Frontend
+      - name: Install frontend dependencies
+        run: |
+          cd Frontend
+          npm ci
+          npm run build
+
+      # 🔵 Backend
+      - name: Install backend dependencies
+        run: |
+          cd Server
+          npm cache clean --force
+          npm ci --fetch-timeout=600000
