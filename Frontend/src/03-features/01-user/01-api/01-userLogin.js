@@ -5,7 +5,7 @@ import axiosClient from "./00-axiosClient";
 
  export async function loginUser(token) {
 
-  console.log(resp,token);
+  
   const resp = await axiosClient.post(
     "/auth/login",
     {},

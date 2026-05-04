@@ -3,7 +3,7 @@ import { BsRobot } from "react-icons/bs";
 import { IoSparkles } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { auth, provider } from "../../01-api/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { browserLocalPersistence, setPersistence, signInWithPopup } from "firebase/auth";
 import { useLogin } from "../../03-features/01-user/03-hook/01-useLogin";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,11 +17,14 @@ export const Login = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
+   
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
    const handleLogin = async () => {
   try {
+
+    await setPersistence(auth, browserLocalPersistence);
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
@@ -36,8 +39,18 @@ export const Login = () => {
     dispatch(setCloseLogin());
     navigate("/", { replace: true });
 
-  } catch (err) {
-    setError(err.response?.data?.message || "Login failed");
+  } 
+    catch (err) {
+  console.error("LOGIN ERROR:", err);
+
+  if (err.code === "auth/popup-closed-by-user") {
+    toast.error("Popup closed. Try again.");
+  } else if (err.code === "auth/network-request-failed") {
+    toast.error("Network issue. Try again.");
+  } else {
+    toast.error("Login failed");
+  }
+
   }
 };
 
