@@ -6,7 +6,6 @@ node_modules/
 ./Server/.env
 
 # Firebase / secrets
-*.json
 Server/src/06-utils/*.json
 
 # Logs
