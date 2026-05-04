@@ -102,17 +102,38 @@ export async function userDetails(req, res) {
 export async function logout(req, res) {
   try {
     const userAgent = req.headers["user-agent"] || null;
+
     await Session.deleteMany({
       userId: req.userId,
       userAgent,
       clientIp: req.clientIp,
     });
 
-    res.clearCookie("access_Token");
-    res.clearCookie("refresh_Token");
-    res.status(201).json({ success: true, message: "User logut successfully" });
+    // 🔥 FIX HERE
+    res.clearCookie("access_Token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+    });
+
+    res.clearCookie("refresh_Token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "User logout successfully",
+    });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 }
 
