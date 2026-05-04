@@ -38,6 +38,7 @@ export const Login = () => {
     toast.success(data.message);
     dispatch(setCloseLogin());
     navigate("/", { replace: true });
+    window.location.reload();
 
   } 
     catch (err) {
