@@ -13,6 +13,7 @@ import './index.css';
 
 import { InterviewReport } from "./05-pages/01-ProtectedPages/InterviewReport/03-report.jsx";
 import InterviewHistory from "./05-pages/01-ProtectedPages/03-interviewHistory.jsx";
+import { CreditPackages } from "./05-pages/01-ProtectedPages/payment/CreditPackages.jsx";
 
 
 export const queryClient = new QueryClient({
@@ -52,7 +53,8 @@ function App() {
         { path: "interview", element: <InterviewSetup /> },
         { path: "interview2", element: <Interview2 /> },
         { path: "interview/report", element: <InterviewReport /> },
-         { path: "interviewHistory", element: <InterviewHistory/> }
+         { path: "interviewHistory", element: <InterviewHistory/> },
+         { path: "creditpackages", element: <CreditPackages/> }
         
       ],
     },

@@ -16,10 +16,12 @@ const userSchema = mongoose.Schema(
         message: "Invalid email address",
       },
     },
-
+    
     firebaseUid: { type: String, required: true }, // ✅ FIXED POSITION
-
+    
     credits: { type: Number, default: 1000 }, // ✅ FIXED POSITION
+    totalCreditsPurchased: { type: Number, default: 100 },
+    paymentHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Payment" }],
   },
   { timestamps: true }
 );

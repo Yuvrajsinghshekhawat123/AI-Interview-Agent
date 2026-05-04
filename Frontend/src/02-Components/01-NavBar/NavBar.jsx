@@ -147,6 +147,7 @@ export default function NavBar() {
                       </p>
 
                       <motion.button
+                        onClick={() => navigate("/user/creditpackages")}
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.95 }}
                         className="w-full bg-gradient-to-r from-[#00D4FF] to-[#00FFB3] text-[#0A0F1E] font-semibold py-2 rounded-lg text-sm transition-all hover:shadow-lg hover:shadow-[#00FFB3]/30"

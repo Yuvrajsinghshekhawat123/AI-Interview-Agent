@@ -37,7 +37,7 @@ export const Interview2 = () => {
   const [interimText, setInterimText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [isIntro, setIsIntro] = useState(true);
-
+  
   const [questionIndex, setQuestionIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
