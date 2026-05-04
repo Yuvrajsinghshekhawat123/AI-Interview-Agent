@@ -58,6 +58,7 @@ export default function NavBar() {
         toast.success(data.message);
         setLogout(false);
         navigate("/");
+        window.location.reload();
       },
 
       onError: (err) => {
