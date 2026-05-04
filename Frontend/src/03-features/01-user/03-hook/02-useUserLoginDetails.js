@@ -8,29 +8,31 @@ import {setUser } from "../../../00-app/01-userSlice";
 
 
 //  useEffect works only inside components or custom hooks — not normal functions
- export function useLoginUserDetails() {
+export function useLoginUserDetails() {
   const dispatch = useDispatch();
 
   const query = useQuery({
     queryKey: ["userDetails"],
     queryFn: async () => {
-      console.log("API call initiated");
+      try {
+        const response = await LoginUserDetails();
 
-      const response = await LoginUserDetails();
+        dispatch(setUser(response.user)); // ✅ only on success
 
-      // ✅ ONLY dispatch here
-      dispatch(setUser(response.user));
+        return response;
+      } catch (error) {
+        // 🔥 VERY IMPORTANT
+        dispatch(setUser(null)); // clear user
 
-      return response;
+        throw error; // let react-query handle it
+      }
     },
     retry: false,
+    refetchOnWindowFocus: false, // 🔥 prevent auto refetch
   });
-
-  // ❌ REMOVE BOTH useEffects
 
   return query;
 }
-
 
 
 
