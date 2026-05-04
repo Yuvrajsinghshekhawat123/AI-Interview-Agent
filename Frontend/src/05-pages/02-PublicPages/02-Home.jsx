@@ -81,6 +81,9 @@ export default function Home() {
     },
   ];
 
+  // add comment anywhere
+console.log("CI TEST");
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0F1E] via-[#0F1629] to-[#0A0F1E] flex justify-center items-center px-4 sm:px-6 lg:px-8">
       <div className="flex justify-center items-center flex-col lg:w-[55vw] gap-5 py-12">
