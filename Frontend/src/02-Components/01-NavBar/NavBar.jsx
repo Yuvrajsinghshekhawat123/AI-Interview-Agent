@@ -54,7 +54,7 @@ export default function NavBar() {
     mutate(undefined, {
       onSuccess: async (data) => {
         dispatch(clearUser());
-        await queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+        queryClient.clear(); // 🔥 THIS IS THE KEY FIX
         toast.success(data.message);
         setLogout(false);
         navigate("/");
