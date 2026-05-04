@@ -23,6 +23,8 @@ export async function Login(req, res) {
       return res.status(401).json({ message: "No token provided" });
     }
 
+    console.log(token);
+
     // ✅ Verify Firebase token
     const decoded = await admin.auth().verifyIdToken(token);
 

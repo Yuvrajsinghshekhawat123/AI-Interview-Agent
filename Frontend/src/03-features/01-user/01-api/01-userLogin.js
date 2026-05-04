@@ -18,7 +18,7 @@ import axiosClient from "./00-axiosClient";
   );
 
  
-  
+  console.log(resp);
 
   return resp.data;
 }
