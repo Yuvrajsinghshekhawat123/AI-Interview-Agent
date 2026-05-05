@@ -111,18 +111,19 @@ export async function logout(req, res) {
 
     // 🔥 FIX HERE
     res.clearCookie("access_Token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      path: "/",
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/",
+});
 
-    res.clearCookie("refresh_Token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      path: "/",
-    });
+res.clearCookie("refresh_Token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/",
+});
+
 
     return res.status(200).json({
       success: true,
