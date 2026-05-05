@@ -105,8 +105,8 @@ export async function logout(req, res) {
 
     await Session.deleteMany({
       userId: req.userId,
-      userAgent,
-      clientIp: req.clientIp,
+      
+      
     });
 
     // 🔥 FIX HERE
