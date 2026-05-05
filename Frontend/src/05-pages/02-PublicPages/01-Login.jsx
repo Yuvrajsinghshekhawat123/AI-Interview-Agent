@@ -3,7 +3,13 @@ import { BsRobot } from "react-icons/bs";
 import { IoSparkles } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { auth, provider } from "../../01-api/firebase";
-import { browserLocalPersistence, setPersistence, signInWithPopup } from "firebase/auth";
+import { ImSpinner2 } from "react-icons/im";
+
+import {
+  browserLocalPersistence,
+  setPersistence,
+  signInWithPopup,
+} from "firebase/auth";
 import { useLogin } from "../../03-features/01-user/03-hook/01-useLogin";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,50 +20,46 @@ import { MdCancel } from "react-icons/md";
 import { setUser } from "../../00-app/01-userSlice";
 export const Login = () => {
   const [rotate, setRotate] = useState(0);
-  const { mutateAsync  } = useLogin();
+
+  const { mutateAsync } = useLogin();
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
-   
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-   const handleLogin = async () => {
-  try {
+  const handleLogin = async () => {
+    try {
+      setProcessing(true);
 
-    await setPersistence(auth, browserLocalPersistence);
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+      await setPersistence(auth, browserLocalPersistence);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-    const token = await user.getIdToken();
-    dispatch(setCloseLogin());
-    // ✅ Correct usage
-   const data = await mutateAsync(token);
-  dispatch(setUser(data.user));
-      
- 
- 
+      const token = await user.getIdToken();
 
-toast.success(data.message);
-navigate("/", { replace: true });
+      const data = await mutateAsync(token);
 
-queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+      dispatch(setUser(data.user));
+      dispatch(setCloseLogin());
 
+      toast.success(data.message);
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("LOGIN ERROR:", err);
 
-  } 
-    catch (err) {
-  console.error("LOGIN ERROR:", err);
-
-  if (err.code === "auth/popup-closed-by-user") {
-    toast.error("Popup closed. Try again.");
-  } else if (err.code === "auth/network-request-failed") {
-    toast.error("Network issue. Try again.");
-  } else {
-    toast.error("Login failed");
-  }
-
-  }
-};
+      if (err.code === "auth/popup-closed-by-user") {
+        toast.error("Popup closed. Try again.");
+      } else if (err.code === "auth/network-request-failed") {
+        toast.error("Network issue. Try again.");
+      } else {
+        toast.error("Login failed");
+      }
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   function handleRotate() {
     setRotate((prev) => prev + 360);
@@ -91,9 +93,8 @@ queryClient.invalidateQueries({ queryKey: ["userDetails"] });
           </div>
 
           <motion.button
-           transition={{ duration:0.2 }}
-          whileHover={{ scale: 1.19 }}
-         
+            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.19 }}
             onClick={() => dispatch(setCloseLogin())}
             className="absolute  -right-3 top-0 text-3xl  transition cursor-pointer"
           >
@@ -130,24 +131,31 @@ queryClient.invalidateQueries({ queryKey: ["userDetails"] });
         {/* Button */}
         <motion.button
           onClick={() => {
-            handleRotate();
-            handleLogin();
+            if (!processing) {
+              handleRotate();
+              handleLogin();
+            }
           }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.6 }}
-          className="flex items-center justify-center gap-2 bg-black text-white px-6 py-3 rounded-full w-full shadow-md cursor-pointer"
+          disabled={processing}
+          className="flex items-center justify-center gap-2 bg-black text-white px-6 py-3 rounded-full w-full shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <motion.img
-            transition={{ delay: 0.1, duration: 0.5 }}
-            animate={{ rotate }}
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="google"
-            className="w-5 h-5"
-          />
-          Continue with Google
+          {processing ? (
+            <>
+              <ImSpinner2 className="animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            <>
+              <motion.img
+                transition={{ delay: 0.1, duration: 0.5 }}
+                animate={{ rotate }}
+                src="https://www.svgrepo.com/show/355037/google.svg"
+                alt="google"
+                className="w-5 h-5"
+              />
+              Continue with Google
+            </>
+          )}
         </motion.button>
       </motion.div>
     </section>
