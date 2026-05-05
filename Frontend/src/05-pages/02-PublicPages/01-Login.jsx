@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { setCloseLogin } from "../../00-app/02-authUISlice";
 import { MdCancel } from "react-icons/md";
+import { setUser } from "../../00-app/01-userSlice";
 export const Login = () => {
   const [rotate, setRotate] = useState(0);
   const { mutateAsync  } = useLogin();
@@ -29,12 +30,13 @@ export const Login = () => {
     const user = result.user;
 
     const token = await user.getIdToken();
-
+    dispatch(setCloseLogin());
     // ✅ Correct usage
    const data = await mutateAsync(token);
-
+  dispatch(setUser(data.user));
+      
  
-dispatch(setCloseLogin());
+ 
 
 toast.success(data.message);
 navigate("/", { replace: true });
