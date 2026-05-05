@@ -5,18 +5,10 @@ import { useLoginUserDetails } from "../../03-features/01-user/03-hook/02-useUse
  
 
 export function AuthRoute() {
-    const { data, isLoading } = useLoginUserDetails();
+     useLoginUserDetails();
     
   
-   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-96">
-        <div className="text-center">
-          <ClipLoader color="#2563eb" loading size={50} />
-        </div>
-      </div>
-    );
-  }
+   
 
    
 
