@@ -22,7 +22,7 @@ export const queryClient = new QueryClient({
       staleTime: 5 * 60 * 1000, // 5 minutes
       gcTime: 60 * 60 * 1000, // 60 minutes
       refetchOnWindowFocus: false,
-      refetchOnMount: false, // ← This prevents multiple calls
+      refetchOnMount: true, // ← This prevents multiple calls
       refetchOnReconnect: false,
       retry: false,
     },
