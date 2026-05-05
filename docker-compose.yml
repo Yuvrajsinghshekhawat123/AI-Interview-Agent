@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./Server
+    container_name: interviewiq-backend
+    restart: unless-stopped
+    env_file:
+      - ./Server/.env
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      FRONTEND_URL: http://localhost
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ./Frontend
+      args:
+        VITE_API_URL: /api
+        VITE_FIREBASE_APIKEY: ${VITE_FIREBASE_APIKEY}
+    container_name: interviewiq-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
