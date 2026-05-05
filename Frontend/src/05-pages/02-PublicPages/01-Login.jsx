@@ -42,6 +42,10 @@ export const Login = () => {
       const data = await mutateAsync(token);
 
       dispatch(setUser(data.user));
+      queryClient.setQueryData(["userDetails"], {
+  success: true,
+  user: data.user,
+});
       dispatch(setCloseLogin());
 
       toast.success(data.message);
