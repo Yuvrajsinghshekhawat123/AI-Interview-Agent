@@ -33,7 +33,7 @@ export const Login = () => {
     // ✅ Correct usage
    const data = await mutateAsync(token);
 
-dispatch(setUser(data.user));
+ 
 dispatch(setCloseLogin());
 
 toast.success(data.message);
