@@ -31,14 +31,16 @@ export const Login = () => {
     const token = await user.getIdToken();
 
     // ✅ Correct usage
-    const data = await mutateAsync(token);
+   const data = await mutateAsync(token);
 
-    await queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+dispatch(setUser(data.user));
+dispatch(setCloseLogin());
 
-    toast.success(data.message);
-    dispatch(setCloseLogin());
-    navigate("/", { replace: true });
-    window.location.reload();
+toast.success(data.message);
+navigate("/", { replace: true });
+
+queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+
 
   } 
     catch (err) {
