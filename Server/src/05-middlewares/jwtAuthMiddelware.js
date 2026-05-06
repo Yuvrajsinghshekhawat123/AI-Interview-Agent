@@ -1,6 +1,6 @@
  import jwt from "jsonwebtoken";
  
-import { setAccessTokenCookies, setRefreshTokenCookie } from "../06-utils/token.js";
+import { cookieOptions, setAccessTokenCookies, setRefreshTokenCookie } from "../06-utils/token.js";
 import argon2 from "argon2";
 import { Session } from "../02-models/02-session.js";
 
@@ -32,8 +32,8 @@ export async function jwtAuthMiddeware(req, res, next) {
         await Session.deleteMany({userId:decoded.userId});
       }
 
-      res.clearCookie("refresh_Token"); //  Delete cookies when refresh expires
-      res.clearCookie("access_Token");
+      res.clearCookie("refresh_Token", cookieOptions);
+res.clearCookie("access_Token", cookieOptions);
       // console.log("referseh token expired");
       return res.status(401).json({ message: "Refresh token expired" }); // ✅ Better message
     }

@@ -3,6 +3,7 @@ import { Session } from "../02-models/02-session.js";
 import argon2 from "argon2";
 import admin from "../06-utils/firebaseAdmin.js";
 import {
+  cookieOptions,
   setAccessTokenCookies,
   setRefreshTokenCookie,
 } from "../06-utils/token.js";
@@ -23,7 +24,7 @@ export async function Login(req, res) {
       return res.status(401).json({ message: "No token provided" });
     }
 
-    console.log(token);
+     
 
     // ✅ Verify Firebase token
     const decoded = await admin.auth().verifyIdToken(token);
@@ -110,19 +111,8 @@ export async function logout(req, res) {
     });
 
     // 🔥 FIX HERE
-    res.clearCookie("access_Token", {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
-});
-
-res.clearCookie("refresh_Token", {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
-});
+  res.clearCookie("refresh_Token", cookieOptions);
+res.clearCookie("access_Token", cookieOptions);
 
 
     return res.status(200).json({

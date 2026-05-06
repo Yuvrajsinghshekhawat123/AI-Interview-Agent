@@ -1,31 +1,36 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-export function setAccessTokenCookies(res,payload){
-    const access_Token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:"1m"});
+const cookieSecure = process.env.COOKIE_SECURE === "true";
 
-    res.cookie("access_Token",access_Token,{
-        httpOnly:true,
-        secure: true,          // MUST be true in production
-  sameSite: "None",
-        path: "/",
-        maxAge:  60 * 1000 
-    })
+export const cookieOptions = {
+  httpOnly: true,
+  secure: cookieSecure,
+  sameSite: cookieSecure ? "None" : "Lax",
+  path: "/",
+};
 
-    return access_Token;
+export function setAccessTokenCookies(res, payload) {
+  const access_Token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1m",
+  });
+
+  res.cookie("access_Token", access_Token, {
+    ...cookieOptions,
+    maxAge: 60 * 1000,
+  });
+
+  return access_Token;
 }
 
+export function setRefreshTokenCookie(res, payload) {
+  const refresh_Token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "20h",
+  });
 
+  res.cookie("refresh_Token", refresh_Token, {
+    ...cookieOptions,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
 
- export  function setRefreshTokenCookie(res,payload) {
-    const  refresh_Token=jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn:"20h"}); // token validity in JWT
-
-    res.cookie("refresh_Token", refresh_Token,{
-        httpOnly:true,
-        secure: true,          // MUST be true in production
-  sameSite: "None",
-         path: "/",
-         maxAge:  24 * 60 * 60 * 1000 // 1 day in ms  , Cookie expires in 24h , JWT itself expires in 20h
-    });
-
-    return  refresh_Token;
-};
+  return refresh_Token;
+}
