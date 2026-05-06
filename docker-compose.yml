@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5000
-      FRONTEND_URL: http://54.224.2.134
+      FRONTEND_URL: http://52.7.51.119
       COOKIE_SECURE: "false"
     ports:
       - "5000:5000"
