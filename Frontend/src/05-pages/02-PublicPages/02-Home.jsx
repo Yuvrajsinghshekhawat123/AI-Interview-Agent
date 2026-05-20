@@ -96,8 +96,8 @@ export default function Home() {
           className="text-xs sm:text-sm text-[#00D4FF]/70 flex justify-center items-center gap-2 flex-wrap w-full lg:w-[35vw]"
         >
           <IoSparkles size={14} className="text-[#00FFB3]" />
-          <span>AI Powered Smart Interview Platform</span>
-          <span>Yuvraj singh shekhawat</span>
+          <span>AI Powered Smart Interview Platform Yuvraj SIngh Shekhawat</span>
+           
         </motion.p>
 
         {/* Heading */}

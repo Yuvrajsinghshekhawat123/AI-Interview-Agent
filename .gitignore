@@ -4,6 +4,7 @@ node_modules/
 # Environment files
 .env
 ./Server/.env
+ansible/group_vars/app.yml
 
 # Firebase / secrets
 Server/src/06-utils/*.json
